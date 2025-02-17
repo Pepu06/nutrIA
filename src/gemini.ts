@@ -52,18 +52,12 @@ export async function image2text(imagePath: string): Promise<string> {
         },
     };
 
-    // Start or continue chat session with history
-    const chatSession = model.startChat({
-        history: chatHistory,
-    });
+    // Create a new chat session without history for image processing
+    const chatSession = model.startChat();
 
     // Envía la solicitud a la API.
     const result = await chatSession.sendMessage([image]);
     const response = result.response.text();
-
-    // Update history with properly formatted messages
-    chatHistory.push(formatMessage("user", "[Image sent]"));
-    chatHistory.push(formatMessage("model", response));
 
     return response;
 }
