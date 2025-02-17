@@ -6,17 +6,19 @@ WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@latest --activate
 ENV PNPM_HOME=/usr/local/bin
 
-COPY . .
-
 COPY package*.json *-lock.yaml ./
 
-RUN apk add --no-cache --virtual .gyp \
-        python3 \
-        make \
-        g++ \
-    && apk add --no-cache git \
-    && pnpm install && pnpm run build \
-    && apk del .gyp
+# Install build dependencies and git, then install node modules and build
+RUN apk add --no-cache --virtual .build-deps \
+    python3 \
+    make \
+    g++ \
+    git \
+    && pnpm install \
+    && pnpm run build \
+    && apk del .build-deps
+
+COPY . .
 
 FROM node:21-alpine3.18 as deploy
 
@@ -28,13 +30,10 @@ EXPOSE $PORT
 
 COPY --from=builder /app/assets ./assets
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/*.json /app/*-lock.yaml ./
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 
-RUN corepack enable && corepack prepare pnpm@latest --activate 
-ENV PNPM_HOME=/usr/local/bin
+RUN corepack enable && corepack prepare pnpm@latest --activate \
+    && pnpm install --prod
 
-RUN npm cache clean --force && pnpm install --production --ignore-scripts \
-    && addgroup -g 1001 -S nodejs && adduser -S -u 1001 nodejs \
-    && rm -rf $PNPM_HOME/.npm $PNPM_HOME/.node-gyp
-
-CMD ["npm", "start"]
+CMD ["node", "dist/app.js"]
