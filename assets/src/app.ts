@@ -4,7 +4,7 @@ import { MongoAdapter as Database } from '@builderbot/database-mongo'
 import { MetaProvider as Provider } from '@builderbot/provider-meta'
 import { image2text, chat } from '../../base-ts-meta-mongo/src/gemini'
 import "dotenv/config";
-import fs from 'fs'
+import fs from 'fs' 
 
 const PORT = process.env.PORT ?? 3008
 

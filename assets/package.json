@@ -5,20 +5,18 @@
   "main": "dist/app.js",
   "type": "module",
   "scripts": {
-    "start": "node ./dist/app.js",
+    "start": "node ./dist/app.js --env-file=.env",
     "lint": "eslint . --no-ignore",
-    "dev": "npm run lint && nodemon ./src/app.ts",
+    "dev": "npm run lint && nodemon ./src/app.ts --env-file=.env",
     "build": "npx rollup -c"
   },
   "keywords": [],
   "dependencies": {
     "@builderbot/bot": "1.2.5",
+    "@builderbot/database-mongo": "1.2.5",
     "@builderbot/provider-meta": "1.2.5",
     "@google/generative-ai": "^0.21.0",
-    "dotenv": "^16.4.7",
-    "mongodb": "^6.13.0",
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "dotenv": "^16.4.7"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
