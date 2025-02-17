@@ -4,7 +4,7 @@ import { MemoryDB as Database } from '@builderbot/bot'
 import { MetaProvider as Provider } from '@builderbot/provider-meta'
 import { image2text, chat } from './gemini'
 import "dotenv/config";
-import { ImageDatabase } from './imageDB'
+import fs from 'fs'
 
 const PORT = process.env.PORT ?? 3008
 
@@ -25,17 +25,9 @@ Mi objetivo es hacer que comer sano sea fácil y divertido para ti.  🎉  ¡Pre
 const imageFlow = addKeyword(EVENTS.MEDIA)
     .addAction(async (ctx, ctxFn) => {
         console.log("Recibi una imagen")
-        const imageBuffer = await ctxFn.provider.downloadMedia(ctx)
-        const imageDB = new ImageDatabase(adapterDB)
-        const imageId = await imageDB.saveImage(imageBuffer)
-        const imageData = await imageDB.getImage(imageId)
-        if (!imageData) {
-            await ctxFn.flowDynamic('Lo siento, hubo un error al procesar la imagen 😔')
-            return
-        }
-        const response = await image2text("Describi muy bien que es lo que ves en esta imagen y luego segui con los macronutrientes y receta, respondeme en argentino", Buffer.from(imageData.data, 'base64'))
+        const localPath = await ctxFn.provider.saveFile(ctx, { path: './assets' })
+        const response = await image2text("Describi muy bien que es lo que ves en esta imagen y luego segui con los macronutrientes y receta, respondeme en argentino", localPath)
         await ctxFn.flowDynamic(response)
-        await imageDB.deleteImage(imageId) // Optional: delete the image after processing
     })
 
 const textFlow = addKeyword<Provider, Database>(['.*'])
