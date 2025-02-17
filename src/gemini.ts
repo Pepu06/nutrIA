@@ -14,7 +14,7 @@ const model = genAI.getGenerativeModel({
 export async function chat(text: string) {
     // Choose a model that's appropriate for your use case.
 
-    const formatPrompt = prompt + `\n\nEl input del usuario es el siguiente: ` + text;
+    const formatPrompt = `\n\nEl input del usuario es el siguiente: ` + text;
 
     const result = await model.generateContent(formatPrompt);
     const response = result.response;
