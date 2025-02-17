@@ -44,6 +44,8 @@ export async function chat(text: string) {
     const result = await chatSession.sendMessage(text);
     const response = result.response.text();
 
+    //
+
     // Update history with properly formatted messages
     chatHistory.push(formatMessage("user", text));
     chatHistory.push(formatMessage("model", response));
