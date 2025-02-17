@@ -1,8 +1,8 @@
 import { join } from 'path'
 import { createBot, createProvider, createFlow, addKeyword, utils, EVENTS } from '@builderbot/bot'
-import { MongoAdapter as Database } from '@builderbot/database-mongo'
+import { MemoryDB as Database } from '@builderbot/bot'
 import { MetaProvider as Provider } from '@builderbot/provider-meta'
-import { image2text, chat } from '../../base-ts-meta-mongo/src/gemini'
+import { image2text, chat } from './gemini'
 import "dotenv/config";
 import fs from 'fs'
 
@@ -28,6 +28,8 @@ const imageFlow = addKeyword(EVENTS.MEDIA)
         const localPath = await ctxFn.provider.saveFile(ctx, { path: './assets' })
         const response = await image2text("Describi muy bien que es lo que ves en esta imagen y luego segui con los macronutrientes y receta, respondeme en argentino", localPath)
         await ctxFn.flowDynamic(response)
+        // Clean up the saved image file
+        await fs.promises.unlink(localPath)
     })
 
 const textFlow = addKeyword<Provider, Database>(['.*'])
@@ -45,10 +47,7 @@ const main = async () => {
         verifyToken: process.env.verifyToken,
         version: 'v18.0'
     })
-    const adapterDB = new Database({
-        dbUri: process.env.MONGO_DB_URI,
-        dbName: process.env.MONGO_DB_NAME,
-    })
+    const adapterDB = new Database()
 
     const { handleCtx, httpServer } = await createBot({
         flow: adapterFlow,
