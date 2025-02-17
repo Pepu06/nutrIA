@@ -5,6 +5,7 @@ import { MetaProvider as Provider } from '@builderbot/provider-meta'
 import { image2text, chat } from './gemini'
 import "dotenv/config";
 import fs from 'fs'
+import { imageDB } from './database'
 
 const PORT = process.env.PORT ?? 3008
 
@@ -26,8 +27,12 @@ const imageFlow = addKeyword(EVENTS.MEDIA)
     .addAction(async (ctx, ctxFn) => {
         console.log("Recibi una imagen")
         const localPath = await ctxFn.provider.saveFile(ctx, { path: './assets' })
+        const imageBuffer = fs.readFileSync(localPath)
+        const userId = ctx.from
+        await imageDB.saveImage(userId, imageBuffer)
         const response = await image2text("Describi muy bien que es lo que ves en esta imagen y luego segui con los macronutrientes y receta, respondeme en argentino", localPath)
         await ctxFn.flowDynamic(response)
+        fs.unlinkSync(localPath) // Remove temporary file after processing
     })
 
 const textFlow = addKeyword<Provider, Database>(['.*'])
