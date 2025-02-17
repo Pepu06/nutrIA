@@ -52,9 +52,18 @@ export async function image2text(imagePath: string): Promise<string> {
         },
     };
 
-    // Envía la solicitud a la API.
-    const result = await model.generateContent([image]);
+    // Start or continue chat session with history
+    const chatSession = model.startChat({
+        history: chatHistory,
+    });
 
-    // Devuelve el texto de la respuesta.
-    return result.response.text();
+    // Envía la solicitud a la API.
+    const result = await chatSession.sendMessage([image]);
+    const response = result.response.text();
+
+    // Update history with properly formatted messages
+    chatHistory.push(formatMessage("user", "[Image sent]"));
+    chatHistory.push(formatMessage("model", response));
+
+    return response;
 }
