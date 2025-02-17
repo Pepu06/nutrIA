@@ -28,8 +28,6 @@ const imageFlow = addKeyword(EVENTS.MEDIA)
         const localPath = await ctxFn.provider.saveFile(ctx, { path: './assets' })
         const response = await image2text("Describi muy bien que es lo que ves en esta imagen y luego segui con los macronutrientes y receta, respondeme en argentino", localPath)
         await ctxFn.flowDynamic(response)
-        // Clean up the saved image file
-        await fs.promises.unlink(localPath)
     })
 
 const textFlow = addKeyword<Provider, Database>(['.*'])
