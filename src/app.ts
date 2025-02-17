@@ -26,7 +26,7 @@ const imageFlow = addKeyword(EVENTS.MEDIA)
     .addAction(async (ctx, ctxFn) => {
         console.log("Recibi una imagen")
         const localPath = await ctxFn.provider.saveFile(ctx, { path: './assets' })
-        const response = await image2text(localPath)
+        const response = await image2text("Describi muy bien que es lo que ves en esta imagen y luego segui con los macronutrientes y receta, respondeme en argentino", localPath)
         await ctxFn.flowDynamic(response)
         // Clean up the saved image file
         await fs.promises.unlink(localPath)
@@ -35,7 +35,7 @@ const imageFlow = addKeyword(EVENTS.MEDIA)
 const textFlow = addKeyword<Provider, Database>(['.*'])
     .addAction(async (ctx, ctxFn) => {
         const userMessage = ctx.body;
-        const response = await chat(userMessage);
+        const response = await chat("Responder de una manera amable y fluida en argentino", userMessage);
         await ctxFn.flowDynamic(response);
     })
 
