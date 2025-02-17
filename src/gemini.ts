@@ -36,7 +36,7 @@ export async function image2text(imagePath: string): Promise<string> {
     };
 
     // Envía la solicitud a la API.
-    const result = await model.generateContent([prompt, image]);
+    const result = await model.generateContent([image]);
 
     // Devuelve el texto de la respuesta.
     return result.response.text();
