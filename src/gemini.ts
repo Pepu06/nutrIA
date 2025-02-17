@@ -34,28 +34,21 @@ export async function chat(text: string) {
 }
 
 export async function image2text(imagePath: string): Promise<string> {
-    // Start or continue chat session with history
-    const chatSession = model.startChat({
-        history: chatHistory,
-    });
-
-    // Prepare the image
+    // Resuelve la ruta de la imagen y lee el archivo.
     const resolvedPath = path.resolve(imagePath);
     const imageBuffer = fs.readFileSync(resolvedPath);
+
+    // Convierte la imagen a base64 y configura la solicitud.
     const image = {
         inlineData: {
             data: imageBuffer.toString('base64'),
-            mimeType: "image/png",
+            mimeType: "image/png", // Cambia esto según el tipo de imagen, si es diferente.
         },
     };
 
-    // Send image and get response
-    const result = await chatSession.sendMessage([image]);
-    const response = result.response.text();
+    // Envía la solicitud a la API.
+    const result = await model.generateContent([image]);
 
-    // Update history with the new interaction
-    chatHistory.push({ role: "user", parts: [image] });
-    chatHistory.push({ role: "model", parts: response });
-
-    return response;
+    // Devuelve el texto de la respuesta.
+    return result.response.text();
 }
