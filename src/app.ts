@@ -13,7 +13,7 @@ const welcomeFlow = addKeyword<Provider, Database>(['hi', 'hello', 'hola'])
 const imageFlow = addKeyword(EVENTS.MEDIA)
     .addAction(async (ctx, ctxFn) => {
         console.log("Recibi una imagen")
-        const localPath = await ctxFn.provider.saveFile(ctx, { path: './assets' })
+        const localPath = await ctxFn.provider.saveFile(ctx, { path: './public' })
         const response = await image2text("Decime que es lo que ves en esta imagen, respondeme en español", localPath)
         await ctxFn.flowDynamic(response)
     })
@@ -25,7 +25,7 @@ const main = async () => {
         jwtToken: process.env.jwtToken,
         numberId: process.env.numberId,
         verifyToken: process.env.verifyToken,
-        version: 'v18.0'
+        version: 'v21.0'
     })
     const adapterDB = new Database()
 
