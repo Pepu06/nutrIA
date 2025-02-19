@@ -25,7 +25,7 @@ Mi objetivo es hacer que comer sano sea fácil y divertido para ti.  🎉  ¡Pre
 const imageFlow = addKeyword(EVENTS.MEDIA)
     .addAction(async (ctx, ctxFn) => {
         console.log("Recibi una imagen")
-        const localPath = await ctxFn.provider.saveFile(ctx, { path: './assets' })
+        const localPath = await ctxFn.provider.saveFile(ctx, { path: './public' })
         const response = await image2text(localPath)
         await ctxFn.flowDynamic(response)
         // Clean up the saved image file
