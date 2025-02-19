@@ -1,12 +1,11 @@
 import { join } from 'path'
 import { createBot, createProvider, createFlow, addKeyword, utils, EVENTS } from '@builderbot/bot'
-import { MongoAdapter as Database } from '@builderbot/database-mongo'
+import { MemoryDB as Database } from '@builderbot/bot'
 import { MetaProvider as Provider } from '@builderbot/provider-meta'
 import { image2text } from './gemini'
 import "dotenv/config";
 
 const PORT = process.env.PORT ?? 3008
-const MONGO_DB_URI = process.env.MONGO_DB_URI ?? 'mongodb://localhost:27017/nutria'
 
 const welcomeFlow = addKeyword<Provider, Database>(['hi', 'hello', 'hola'])
     .addAnswer(`🙌 Hello welcome to this *Chatbot*`)
@@ -14,11 +13,11 @@ const welcomeFlow = addKeyword<Provider, Database>(['hi', 'hello', 'hola'])
 const imageFlow = addKeyword(EVENTS.MEDIA)
     .addAction(async (ctx, ctxFn) => {
         console.log("Recibi una imagen")
-        const localPath = await ctxFn.provider.saveFile(ctx, { path: './public' })
-
-        const response = await image2text("Describir detalladamente que es lo que ves en esta imagen y luego detallar los macronutrientes, calorias y receta, respondeme en argentino", localPath)
+        const localPath = await ctxFn.provider.saveFile(ctx, { path: './assets' })
+        const response = await image2text("Decime que es lo que ves en esta imagen, respondeme en español", localPath)
         await ctxFn.flowDynamic(response)
     })
+
 
 const main = async () => {
     const adapterFlow = createFlow([welcomeFlow, imageFlow])
@@ -26,12 +25,9 @@ const main = async () => {
         jwtToken: process.env.jwtToken,
         numberId: process.env.numberId,
         verifyToken: process.env.verifyToken,
-        version: process.env.version
+        version: 'v18.0'
     })
-    const adapterDB = new Database({
-        dbUri: MONGO_DB_URI,
-        dbName: process.env.MONGO_DB_NAME ?? 'nutria'
-    })
+    const adapterDB = new Database()
 
     const { handleCtx, httpServer } = await createBot({
         flow: adapterFlow,
@@ -77,6 +73,7 @@ const main = async () => {
             return res.end(JSON.stringify({ status: 'ok', number, intent }))
         })
     )
+
     httpServer(+PORT)
 }
 
