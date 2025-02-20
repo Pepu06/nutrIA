@@ -40,7 +40,7 @@ const textFlow = addKeyword<Provider, Database>(['foto', 'imagen', 'plato', 'com
     })
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, imageFlow, textFlow])
+    const adapterFlow = createFlow([welcomeFlow, imageFlow])
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.jwtToken,
         numberId: process.env.numberId,
