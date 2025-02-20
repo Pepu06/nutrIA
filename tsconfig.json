@@ -22,7 +22,7 @@
   "include": [
     "**/*.js",
     "**/*.ts"
-, "../base-ts-meta-mongo/src/app.mongo.ts", "../base-ts-meta-mongo/src/gemini.ts"  ],
+  ],
   "exclude": [
     "node_modules",
     "dist",
