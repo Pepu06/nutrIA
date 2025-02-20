@@ -22,33 +22,50 @@ Si me pides una receta por escrito: ✍️
 ¡No hay problema! Dime qué se te antoja comer hoy y te daré una receta detallada y deliciosa. 😋 Te diré los ingredientes exactos, cómo prepararlo y hasta consejos de cocina. 👨‍🍳
 Mi objetivo es hacer que comer sano sea fácil y divertido para ti.  🎉  ¡Pregúntame lo que quieras!  Estoy aquí para apoyarte en tu camino hacia una vida más saludable. 💪`)
 
-// const imageFlow = addKeyword(EVENTS.MEDIA)
-//     .addAction(async (ctx, ctxFn) => {
-//         console.log("Recibi una imagen")
-//         const localPath = await ctxFn.provider.saveFile(ctx, { path: './assets' })
-//         const response = await image2text(localPath)
-//         await ctxFn.flowDynamic(response)
-//         // Clean up the saved image file
-//         await fs.promises.unlink(localPath)
-//     })
-
-const textFlow = addKeyword<Provider, Database>(['.*'])
+const imageFlow = addKeyword(EVENTS.MEDIA)
     .addAction(async (ctx, ctxFn) => {
-        if (ctx.message?.hasMedia) {
-            console.log("Recibi una imagen")
+        console.log("Recibi una imagen")
         const localPath = await ctxFn.provider.saveFile(ctx, { path: './assets' })
         const response = await image2text(localPath)
         await ctxFn.flowDynamic(response)
         // Clean up the saved image file
         await fs.promises.unlink(localPath)
-        }
+    })
+
+const textFlow = addKeyword<Provider, Database>(['a', 'b', 
+    'c',
+    'd',
+    'e',
+    'f',
+    'g',
+    'h',
+    'i',
+    'j',
+    'k',
+    'l',
+    'm',
+    'n',
+    'o',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z',
+])
+    .addAction(async (ctx, ctxFn) => {
         const userMessage = ctx.body;
         const response = await chat(userMessage);
         await ctxFn.flowDynamic(response);
     })
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, textFlow])
+    const adapterFlow = createFlow([welcomeFlow, imageFlow, textFlow])
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.jwtToken,
         numberId: process.env.numberId,
