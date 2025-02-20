@@ -32,17 +32,7 @@ const imageFlow = addKeyword(EVENTS.MEDIA)
         await fs.promises.unlink(localPath)
     })
 
-const textFlow = addKeyword<Provider, Database>([// Palabras Clave para Imágenes de Platos 📸📊😋💪🥑🍗🍚
-    'foto', 'imagen', 'plato', 'comida', 'almuerzo', 'cena', 'desayuno', 'esto', 'mira', 've', 'qué es esto', 'analiza', 'nutrición', 'calorías', 'macros', 'información', 'datos', 'valor nutricional', 'ingredientes', 'receta',
-  
-    // Palabras Clave para Recetas por Texto 📝🤩😋💡❓🍳
-    'receta', 'quiero receta', 'dame receta', 'recetas', 'cocinar', 'comer', 'de', 'con', 'antojo', 'sugerencia', 'idea',
-  
-    // Palabras Clave para Continuar Interacción y Más Ayuda 😊🤔🚀😉
-    'más', 'otra cosa', 'ayuda', 'sugerencia', 'idea', 'mañana', 'próximo', 'desayuno', 'almuerzo', 'cena', 'algo más',
-  
-    // Palabras Clave de Gustos/Preferencias (Opcional) 🥕💨🍰🥗
-    'vegetariano', 'vegano', 'sin gluten', 'rápido', 'fácil', 'dulce', 'salado', 'picante', 'ligero', 'completo'])
+const textFlow = addKeyword<Provider, Database>(['foto', 'imagen', 'plato', 'comida', 'almuerzo', 'cena', 'desayuno', 'esto', 'mira', 've', 'qué es esto', 'analiza', 'nutrición', 'calorías', 'macros', 'información', 'datos', 'valor nutricional', 'ingredientes', 'receta', 'receta', 'quiero receta', 'dame receta', 'recetas', 'cocinar', 'comer', 'de', 'con', 'antojo', 'sugerencia', 'idea', 'más', 'otra cosa', 'ayuda', 'sugerencia', 'idea', 'mañana', 'próximo', 'desayuno', 'almuerzo', 'cena', 'algo más', 'vegetariano', 'vegano', 'sin gluten', 'rápido', 'fácil', 'dulce', 'salado', 'picante', 'ligero', 'completo'])
     .addAction(async (ctx, ctxFn) => {
         const userMessage = ctx.body;
         const response = await chat(userMessage);
@@ -55,7 +45,7 @@ const main = async () => {
         jwtToken: process.env.jwtToken,
         numberId: process.env.numberId,
         verifyToken: process.env.verifyToken,
-        version: 'v18.0'
+        version: 'v21.0'
     })
     const adapterDB = new Database()
 
