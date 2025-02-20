@@ -32,7 +32,7 @@ const imageFlow = addKeyword(EVENTS.MEDIA)
 const textFlow = addKeyword<Provider, Database>(['.*'])
     .addAction(async (ctx, ctxFn) => {
         const userMessage = ctx.body;
-        const response = await chat(userMessage);
+        const response = await chat('Este es el prompt del usuario: ', userMessage);
         await ctxFn.flowDynamic(response);
     })
 
