@@ -2,47 +2,30 @@ import { join } from 'path'
 import { createBot, createProvider, createFlow, addKeyword, utils, EVENTS } from '@builderbot/bot'
 import { MemoryDB as Database } from '@builderbot/bot'
 import { MetaProvider as Provider } from '@builderbot/provider-meta'
-import { image2text, chat } from './gemini'
+import { image2text } from './gemini'
 import "dotenv/config";
 
 const PORT = process.env.PORT ?? 3008
 
 const welcomeFlow = addKeyword<Provider, Database>(['hi', 'hello', 'hola'])
-    .addAnswer(`¡Hola! 👋 ¡Soy tu asistente de nutrición amigable! 😊 Estoy aquí para ayudarte a comer de forma más saludable y deliciosa. 🍎🥦
-
-¿Cómo puedo ayudarte hoy?
-
-Si me envías una foto de tu plato: 📸
-
-¡Analizaré tu comida como un experto! 🧐 Te diré los macronutrientes (proteínas, carbohidratos, grasas) y las calorías que tiene. 📊
-¡Y no solo eso! 🤩 Te daré una receta súper detallada para que puedas preparar ese plato en casa, ¡paso a paso! 📝
-Si me pides una receta por escrito: ✍️
-
-¡No hay problema! Dime qué se te antoja comer hoy y te daré una receta detallada y deliciosa. 😋 Te diré los ingredientes exactos, cómo prepararlo y hasta consejos de cocina. 👨‍🍳
-Mi objetivo es hacer que comer sano sea fácil y divertido para ti.  🎉  ¡Pregúntame lo que quieras!  Estoy aquí para apoyarte en tu camino hacia una vida más saludable. 💪`)
+    .addAnswer(`🙌 Hello welcome to this *Chatbot*`)
 
 const imageFlow = addKeyword(EVENTS.MEDIA)
     .addAction(async (ctx, ctxFn) => {
         console.log("Recibi una imagen")
         const localPath = await ctxFn.provider.saveFile(ctx, { path: './public' })
-        const response = await image2text("Decime detaladamente que es lo que ves en esta imagen y luego procede con la receta, macronutrientes y calorias, respondeme en español", localPath)
+        const response = await image2text("Decime que es lo que ves en esta imagen, respondeme en español", localPath)
         await ctxFn.flowDynamic(response)
     })
 
-const textFlow = addKeyword<Provider, Database>(['.*'])
-    .addAction(async (ctx, ctxFn) => {
-        const userMessage = ctx.body;
-        const response = await chat('Este es el prompt del usuario: ', userMessage);
-        await ctxFn.flowDynamic(response);
-    })
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, imageFlow, textFlow])
+    const adapterFlow = createFlow([welcomeFlow, imageFlow])
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.jwtToken,
         numberId: process.env.numberId,
         verifyToken: process.env.verifyToken,
-        version: 'v21.0'
+        version: 'v18.0'
     })
     const adapterDB = new Database()
 
