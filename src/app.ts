@@ -17,9 +17,7 @@ Si me envías una foto de tu plato: 📸
 
 ¡Analizaré tu comida como un experto! 🧐 Te diré los macronutrientes (proteínas, carbohidratos, grasas) y las calorías que tiene. 📊
 ¡Y no solo eso! 🤩 Te daré una receta súper detallada para que puedas preparar ese plato en casa, ¡paso a paso! 📝
-Si me pides una receta por escrito: ✍️
 
-¡No hay problema! Dime qué se te antoja comer hoy y te daré una receta detallada y deliciosa. 😋 Te diré los ingredientes exactos, cómo prepararlo y hasta consejos de cocina. 👨‍🍳
 Mi objetivo es hacer que comer sano sea fácil y divertido para ti.  🎉  ¡Pregúntame lo que quieras!  Estoy aquí para apoyarte en tu camino hacia una vida más saludable. 💪`)
 
 const imageFlow = addKeyword(EVENTS.MEDIA)
