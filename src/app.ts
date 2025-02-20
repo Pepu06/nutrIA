@@ -8,7 +8,7 @@ import fs from 'fs'
 
 const PORT = process.env.PORT ?? 3008
 
-const welcomeFlow = addKeyword<Provider, Database>(['hi', 'hello', 'hola'])
+const welcomeFlow = addKeyword<Provider, Database>(['hola', 'buenas', 'ey', 'qué tal', 'saludos'])
     .addAnswer(`¡Holaaaa! 👋 ¡Soy tu asistente de nutrición amigable! 😊 Estoy aquí para ayudarte a comer de forma más saludable y deliciosa. 🍎🥦
 
 ¿Cómo puedo ayudarte hoy?
@@ -32,32 +32,17 @@ const imageFlow = addKeyword(EVENTS.MEDIA)
         await fs.promises.unlink(localPath)
     })
 
-const textFlow = addKeyword<Provider, Database>(['a', 'b', 
-    'c',
-    'd',
-    'e',
-    'f',
-    'g',
-    'h',
-    'i',
-    'j',
-    'k',
-    'l',
-    'm',
-    'n',
-    'o',
-    'p',
-    'q',
-    'r',
-    's',
-    't',
-    'u',
-    'v',
-    'w',
-    'x',
-    'y',
-    'z',
-])
+const textFlow = addKeyword<Provider, Database>([// Palabras Clave para Imágenes de Platos 📸📊😋💪🥑🍗🍚
+    'foto', 'imagen', 'plato', 'comida', 'almuerzo', 'cena', 'desayuno', 'esto', 'mira', 've', 'qué es esto', 'analiza', 'nutrición', 'calorías', 'macros', 'información', 'datos', 'valor nutricional', 'ingredientes', 'receta',
+  
+    // Palabras Clave para Recetas por Texto 📝🤩😋💡❓🍳
+    'receta', 'quiero receta', 'dame receta', 'recetas', 'cocinar', 'comer', 'de', 'con', 'antojo', 'sugerencia', 'idea',
+  
+    // Palabras Clave para Continuar Interacción y Más Ayuda 😊🤔🚀😉
+    'más', 'otra cosa', 'ayuda', 'sugerencia', 'idea', 'mañana', 'próximo', 'desayuno', 'almuerzo', 'cena', 'algo más',
+  
+    // Palabras Clave de Gustos/Preferencias (Opcional) 🥕💨🍰🥗
+    'vegetariano', 'vegano', 'sin gluten', 'rápido', 'fácil', 'dulce', 'salado', 'picante', 'ligero', 'completo'])
     .addAction(async (ctx, ctxFn) => {
         const userMessage = ctx.body;
         const response = await chat(userMessage);
